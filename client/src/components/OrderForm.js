@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OrderForm.css';
 
+const regions = ['Basin Sionnach', 'Speaking Woods', 'ReachingTrail','Howl County','Callums Cape','The Moors',
+  'Viper Pit','Clanshead Valley','Nevish Line','Stonecradle','Weathered Expanse','Morgens Crossing',
+  'Farranac Coast','The Linn of Mercy','Callahans Passage','Marban Hollow','The Clastra','Stlican Shelf',
+  'Godcrofts','Oathbreaker Isles','Endless Shore','Tempest Island','Fishermans Row','Westgate','Kings Cage',
+  'Deadlands','The Drowned Vale','Allods Bight','Reavers Pass','The Fingers','Loch Mor'
+];
+
 function OrderForm() {
   const navigate = useNavigate();
   const [order, setOrder] = useState({
@@ -105,7 +112,18 @@ function OrderForm() {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="destinationRegion">Region:</label>
-            <input type="text" id="destinationRegion" name="destinationRegion" value={order.destinationRegion} onChange={handleChange} required />
+            <select
+                id="destinationRegion"
+                name="destinationRegion"
+                value={order.destinationRegion}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Region</option>
+                {regions.map(region => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="destinationBuilding">Building:</label>
@@ -146,7 +164,18 @@ function OrderForm() {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="fromRegion">Region:</label>
-            <input type="text" id="fromRegion" name="fromRegion" value={order.fromRegion} onChange={handleChange} required />
+            <select
+                id="fromRegion"
+                name="fromRegion"
+                value={order.fromRegion}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Region</option>
+                {regions.map(region => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+              </select>
           </div>
           <div className="form-group">
             <label htmlFor="fromBuilding">Building:</label>

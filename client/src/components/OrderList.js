@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './OrderList.css';
 
+const mapUrlRegex = /^https:\/\/foxholestats\.com\/index\.php\?lat=-?\d+(\.\d+)?&lng=-?\d+(\.\d+)?$/;
+
 function formatDate(dateString) {
   const options = { 
     //year: 'numeric', 
@@ -11,6 +13,20 @@ function formatDate(dateString) {
   };
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
+
+const renderCoordinates = (coordinates) => {
+  if (mapUrlRegex.test(coordinates)) {
+    return (
+      <button
+        onClick={() => window.open(coordinates, '_blank')}
+        className="view-map-button"
+      >
+        View on Map
+      </button>
+    );
+  }
+  return coordinates;
+};
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
@@ -139,14 +155,14 @@ function OrderList() {
                 <h4>Destination</h4>
                 <p><strong>Region:</strong> {order.destinationRegion}</p>
                 <p><strong>Building:</strong> {order.destinationBuilding}</p>
-                <p><strong>Coordinates:</strong> {order.destinationCoordinates}</p>
+                <p><strong>Coordinates:</strong> {renderCoordinates(order.destinationCoordinates)}</p>
                 <p><strong>Reserve:</strong> {order.destinationReserve}</p>
               </div>
               <div className="order-section">
                 <h4>From</h4>
                 <p><strong>Region:</strong> {order.fromRegion}</p>
                 <p><strong>Building:</strong> {order.fromBuilding}</p>
-                <p><strong>Coordinates:</strong> {order.fromCoordinates}</p>
+                <p><strong>Coordinates:</strong> {renderCoordinates(order.fromCoordinates)}</p>
                 <p><strong>Reserve:</strong> {order.fromReserve}</p>
               </div>
             </div>
