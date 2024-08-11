@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './OrderForm.css';
 
 function OrderForm() {
+  const navigate = useNavigate();
   const [order, setOrder] = useState({
     order: '',
     requester: '',
@@ -10,10 +12,12 @@ function OrderForm() {
     destinationBuilding: '',
     destinationCoordinates: '',
     destinationReserve: '',
+    destinationPublicStockpile: false,
     fromRegion: '',
     fromBuilding: '',
     fromCoordinates: '',
     fromReserve: '',
+    fromPublicStockpile: false,
     status: 'Pending'
   });
 
@@ -41,6 +45,7 @@ function OrderForm() {
           fromReserve: '',
           status: 'Pending'
         });
+        navigate('/'); // Navigate to the View Order page
       }
     } catch (error) {
       console.error('Error submitting order:', error);
