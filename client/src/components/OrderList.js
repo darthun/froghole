@@ -3,7 +3,7 @@ import './OrderList.css';
 
 function formatDate(dateString) {
   const options = { 
-    year: 'numeric', 
+    //year: 'numeric', 
     month: 'long', 
     day: 'numeric', 
     hour: '2-digit', 
@@ -124,10 +124,15 @@ function OrderList() {
           <div className="order-content">
             <div className="order-section details">
               <h4>Details</h4>
-              <p><strong>Requester:</strong> {order.requester}</p>
-              <p><strong>Order:</strong> {order.order}</p>
-              <p><strong>Status:</strong> {order.status}</p>
-              <p><strong>Delivered Before:</strong> {formatDate(order.deliveredBefore).toLocaleString()}</p>
+              <div className="order-details">
+                <p><strong>Requester:</strong> {order.requester}</p>
+                <p><strong>Status:</strong> {order.status}</p>
+                <p><strong>Delivered Before:</strong> {formatDate(order.deliveredBefore).toLocaleString()}</p>
+                <p><strong>Order:</strong></p>
+              </div>
+              <p className={`order-text ${order.destinationReserve === 'Public' && order.fromReserve === 'Public' ? 'public-stockpile' : ''}`}> {order.order}</p>
+
+
             </div>
             <div className="order-panels">
               <div className="order-section">
