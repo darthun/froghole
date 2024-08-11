@@ -156,6 +156,8 @@ function OrderList() {
                       <option value="Accepted">Accepted</option>
                       <option value="In Progress">In Progress</option>
                       <option value="Blocked">Blocked</option>
+                      <option value="Failed">Failed</option>
+                      <option value="Complete">Complete</option>
                     </select>
                     <button onClick={() => handleUpdateStatus(order.id, tempStatus[order.id] || order.status)}>
                       Update Status

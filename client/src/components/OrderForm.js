@@ -12,22 +12,34 @@ function OrderForm() {
     destinationBuilding: '',
     destinationCoordinates: '',
     destinationReserve: '',
-    destinationPublicStockpile: false,
+    destinationPublicStockpile: true,
     fromRegion: '',
     fromBuilding: '',
     fromCoordinates: '',
     fromReserve: '',
-    fromPublicStockpile: false,
+    fromPublicStockpile: true,
     status: 'Pending'
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+      // Create a copy of the order object
+  const submittedOrder = { ...order };
+
+  // Replace Reserve values with 'Public' if Public Stockpile is checked
+  if (submittedOrder.destinationPublicStockpile) {
+    submittedOrder.destinationReserve = 'Public';
+  }
+  if (submittedOrder.fromPublicStockpile) {
+    submittedOrder.fromReserve = 'Public';
+  }
+
     try {
       const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
+        body: JSON.stringify(submittedOrder),
       });
       if (response.ok) {
         alert('Order submitted successfully!');
@@ -39,10 +51,12 @@ function OrderForm() {
           destinationBuilding: '',
           destinationCoordinates: '',
           destinationReserve: '',
+          destinationPublicStockpile: true,
           fromRegion: '',
           fromBuilding: '',
           fromCoordinates: '',
           fromReserve: '',
+          fromPublicStockpile: true,
           status: 'Pending'
         });
         navigate('/'); // Navigate to the View Order page
@@ -53,7 +67,8 @@ function OrderForm() {
   };
 
   const handleChange = (e) => {
-    setOrder({ ...order, [e.target.name]: e.target.value });
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setOrder({ ...order, [e.target.name]: value });
   };
 
   return (
@@ -102,11 +117,29 @@ function OrderForm() {
           </div>
         </div>
         <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="destinationReserve">Reserve:</label>
-            <input type="text" id="destinationReserve" name="destinationReserve" value={order.destinationReserve} onChange={handleChange} />
-          </div>
-        </div>
+  <div className="form-group">
+    <label htmlFor="destinationReserve">Reserve:</label>
+    <input
+      type="text"
+      id="destinationReserve"
+      name="destinationReserve"
+      value={order.destinationReserve}
+      onChange={handleChange}
+      disabled={order.destinationPublicStockpile}
+    />
+  </div>
+  <div className="checkbox-group">
+    <label>
+      <input
+        type="checkbox"
+        name="destinationPublicStockpile"
+        checked={order.destinationPublicStockpile}
+        onChange={handleChange}
+      />
+      Public Stockpile
+    </label>
+  </div>
+</div>
       </div>
       <div className="form-section">
         <h3>From</h3>
@@ -125,11 +158,29 @@ function OrderForm() {
           </div>
         </div>
         <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="fromReserve">Reserve:</label>
-            <input type="text" id="fromReserve" name="fromReserve" value={order.fromReserve} onChange={handleChange} />
-          </div>
-        </div>
+  <div className="form-group">
+    <label htmlFor="fromReserve">Reserve:</label>
+    <input
+      type="text"
+      id="fromReserve"
+      name="fromReserve"
+      value={order.fromReserve}
+      onChange={handleChange}
+      disabled={order.fromPublicStockpile}
+    />
+  </div>
+  <div className="checkbox-group">
+    <label>
+      <input
+        type="checkbox"
+        name="fromPublicStockpile"
+        checked={order.fromPublicStockpile}
+        onChange={handleChange}
+      />
+      Public Stockpile
+    </label>
+  </div>
+</div>
       </div>
       <button type="submit">Submit Order</button>
     </form>
