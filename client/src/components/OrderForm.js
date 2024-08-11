@@ -9,6 +9,12 @@ const regions = ['Basin Sionnach', 'Speaking Woods', 'ReachingTrail','Howl Count
   'Deadlands','The Drowned Vale','Allods Bight','Reavers Pass','The Fingers','Loch Mor'
 ];
 
+const buildings = ['Coal Field', 'Component Field', 'Component Mine', 'Concrete Mixer', 'Construction Yard',
+   'Engineering Center', 'Facilities', 'Factory', 'Field Hospital', 'Garage', 'Hospital', 'Mass Production Factory',
+   'Material Pallet', 'Oil Field', 'Refinery', 'Resource Container', 'Rocket Launch Site', 'Salvage Field', 'Salvage Mine',
+   'Seaport', 'Shipyard', 'Shipping Container', 'Shippable Crate', 'Storage Box',
+   'Storage Depot', 'Storage Room', 'Sulfur Field', 'Sulfur Mine'];
+
 function OrderForm() {
   const navigate = useNavigate();
   const [order, setOrder] = useState({
@@ -123,12 +129,23 @@ function OrderForm() {
                 {regions.map(region => (
                   <option key={region} value={region}>{region}</option>
                 ))}
-            </select>
+                </select>
           </div>
           <div className="form-group">
             <label htmlFor="destinationBuilding">Building:</label>
-            <input type="text" id="destinationBuilding" name="destinationBuilding" value={order.destinationBuilding} onChange={handleChange} required />
-          </div>
+            <select
+              id="destinationBuilding"
+              name="destinationBuilding"
+              value={order.destinationBuilding}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Building</option>
+              {buildings.map(building => (
+                <option key={building} value={building}>{building}</option>
+              ))}
+            </select>
+            </div>
           <div className="form-group">
             <label htmlFor="destinationCoordinates">Coordinates:</label>
             <input type="text" id="destinationCoordinates" name="destinationCoordinates" value={order.destinationCoordinates} onChange={handleChange} />
@@ -179,8 +196,19 @@ function OrderForm() {
           </div>
           <div className="form-group">
             <label htmlFor="fromBuilding">Building:</label>
-            <input type="text" id="fromBuilding" name="fromBuilding" value={order.fromBuilding} onChange={handleChange} required />
-          </div>
+            <select
+              id="fromBuilding"
+              name="fromBuilding"
+              value={order.fromBuilding}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Building</option>
+              {buildings.map(building => (
+                <option key={building} value={building}>{building}</option>
+              ))}
+            </select>
+            </div>
           <div className="form-group">
             <label htmlFor="fromCoordinates">Coordinates:</label>
             <input type="text" id="fromCoordinates" name="fromCoordinates" value={order.fromCoordinates} onChange={handleChange} />
