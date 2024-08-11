@@ -30,6 +30,7 @@ const renderCoordinates = (coordinates) => {
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
+  const [expandedOrders, setExpandedOrders] = useState({});
 
   useEffect(() => {
     fetchOrders();
@@ -45,6 +46,13 @@ function OrderList() {
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
+  };
+
+    const toggleOrderExpansion = (orderId) => {
+    setExpandedOrders(prev => ({
+      ...prev,
+      [orderId]: !prev[orderId]
+    }));
   };
 
   const handleAcceptOrder = async (orderId) => {
@@ -136,7 +144,15 @@ function OrderList() {
               : ''
           }`}
         >
-          <h3>Order #{order.id}</h3>
+            <div className="order-summary" onClick={() => toggleOrderExpansion(order.id)}>
+            <span>#{order.id}</span>{'\u00A0'}
+            <span>{order.destinationRegion} ➔ {order.fromRegion}</span>
+            <span className="order-preview">{order.order.slice(0, 50)}</span>
+            <span>{expandedOrders[order.id] ? '▲' : '▼'}</span>
+          </div>
+          {expandedOrders[order.id] && (
+          <>
+                    <h3>Order #{order.id}</h3>
           <div className="order-content">
             <div className="order-section details">
               <h4>Details</h4>
@@ -147,8 +163,6 @@ function OrderList() {
                 <p><strong>Order:</strong></p>
               </div>
               <p className={`order-text ${order.destinationReserve === 'Public' && order.fromReserve === 'Public' ? 'public-stockpile' : ''}`}> {order.order}</p>
-
-
             </div>
             <div className="order-panels">
               <div className="order-section">
@@ -198,6 +212,9 @@ function OrderList() {
               )}
             </div>
           </div>
+          </>
+          )}
+
         </div>
       ))}
     </div>
