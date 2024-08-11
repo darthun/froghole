@@ -112,7 +112,14 @@ function OrderList() {
     <div className="order-list">
       <h2>Current Orders</h2>
       {orders.map((order) => (
-        <div key={order.id} className="order-item">
+        <div 
+          key={order.id} 
+          className={`order-item ${
+            order.destinationReserve === 'Public' && order.fromReserve === 'Public' 
+              ? 'public-stockpile' 
+              : ''
+          }`}
+        >
           <h3>Order #{order.id}</h3>
           <div className="order-content">
             <div className="order-section details">
