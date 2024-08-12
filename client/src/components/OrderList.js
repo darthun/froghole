@@ -144,12 +144,12 @@ function OrderList() {
               : ''
           }`}
         >
-            <div className="order-summary" onClick={() => toggleOrderExpansion(order.id)}>
-            <span>#{order.id}</span>{'\u00A0'}
-            <span>{order.destinationRegion} ➔ {order.fromRegion}</span>
-            <span className="order-preview">{order.order.slice(0, 50)}</span>
-            <span>{expandedOrders[order.id] ? '▲' : '▼'}</span>
-          </div>
+        <div className="order-summary" onClick={() => toggleOrderExpansion(order.id)}>
+          <span className="order-id">#{order.id}</span>
+          <span className="order-regions">{order.destinationRegion} ➔ {order.fromRegion}</span>
+          <span className="order-preview">{order.order.slice(0, 50)}</span>
+          <span className="order-expand-icon">{expandedOrders[order.id] ? '▲' : '▼'}</span>
+        </div>
           {expandedOrders[order.id] && (
           <>
                     <h3>Order #{order.id}</h3>
