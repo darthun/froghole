@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OrderForm.css';
 
+const mapUrlRegex = /^https:\/\/foxholestats\.com\/index\.php\?lat=-?\d+(\.\d+)?&lng=-?\d+(\.\d+)?$/;
+
 const regions = ['Basin Sionnach', 'Speaking Woods', 'ReachingTrail','Howl County','Callums Cape','The Moors',
   'Viper Pit','Clanshead Valley','Nevish Line','Stonecradle','Weathered Expanse','Morgens Crossing',
   'Farranac Coast','The Linn of Mercy','Callahans Passage','Marban Hollow','The Clastra','Stlican Shelf',
@@ -33,6 +35,44 @@ function OrderForm() {
     fromPublicStockpile: true,
     status: 'Pending'
   });
+
+  const [mapOpened, setMapOpened] = useState({
+    destination: false,
+    from: false
+  });
+
+  const handleChooseOnMap = (type) => {
+    if (mapOpened[type]) {
+      handleValidateCoords(type);
+    } else {
+      window.open('https://foxholestats.com/drawLeaflet.php?full=1&link=1', '_blank');
+      setMapOpened(prev => ({ ...prev, [type]: true }));
+      // Reset the coordinates if the user is choosing new ones
+      setOrder(prev => ({ ...prev, [`${type}Coordinates`]: '' }));
+    }
+  };
+
+  const handleValidateCoords = async (type) => {
+    try {
+      
+        const text = await navigator.clipboard.readText();
+        if (mapUrlRegex.test(text)) {
+          // The clipboard content is a valid map URL
+          console.log(`Valid ${type} coordinates: ${text}`);
+          setOrder(prev => ({ ...prev, [`${type}Coordinates`]: text }));
+          // Reset the mapOpened state for this type
+          setMapOpened(prev => ({ ...prev, [type]: false }));
+        } else {
+          // The clipboard content is not a valid map URL
+          console.error(`Invalid ${type} coordinates: ${text}`);
+          alert('The clipboard does not contain a valid map URL. Please try again.');
+        }
+      
+    } catch (err) {
+      console.error('Failed to read clipboard contents: ', err);
+      alert('Failed to read clipboard contents. Please make sure you have copied the map URL and granted permission to access the clipboard.');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,10 +186,17 @@ function OrderForm() {
               ))}
             </select>
             </div>
-          <div className="form-group">
-            <label htmlFor="destinationCoordinates">Coordinates:</label>
-            <input type="text" id="destinationCoordinates" name="destinationCoordinates" value={order.destinationCoordinates} onChange={handleChange} />
-          </div>
+            <div className="form-group">
+              <label htmlFor="destinationCoordinates">Coordinates:</label>
+               <button 
+                type="button" 
+                onClick={() => handleChooseOnMap('destination')}
+                className="choose-on-map-button"
+              >
+                {mapOpened.destination ? 'Validate Clipboard Coords' :
+                (order.destinationCoordinates ? 'Change Coordinates' : 'Choose on Map')}
+              </button>
+            </div>
         </div>
         <div className="form-row">
   <div className="form-group">
@@ -209,10 +256,17 @@ function OrderForm() {
               ))}
             </select>
             </div>
-          <div className="form-group">
-            <label htmlFor="fromCoordinates">Coordinates:</label>
-            <input type="text" id="fromCoordinates" name="fromCoordinates" value={order.fromCoordinates} onChange={handleChange} />
-          </div>
+            <div className="form-group">
+              <label htmlFor="fromCoordinates">Coordinates:</label>
+              <button 
+                type="button" 
+                onClick={() => handleChooseOnMap('from')}
+                className="choose-on-map-button"
+              >
+                {mapOpened.from ? 'Validate Clipboard Coords' :
+                (order.fromCoordinates ? 'Change Coordinates' : 'Choose on Map')}
+              </button>
+            </div>
         </div>
         <div className="form-row">
   <div className="form-group">

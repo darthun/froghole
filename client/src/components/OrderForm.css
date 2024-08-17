@@ -115,3 +115,18 @@
     color: #ffffff;
     cursor: not-allowed;
   }
+
+  .choose-on-map-button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .choose-on-map-button:hover {
+    background-color: #45a049;
+  }
